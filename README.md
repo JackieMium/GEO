@@ -1,6 +1,22 @@
 fork 自 Jimmy 的一个处理芯片数据的 Repo。
+原 Repo 信息：
 
-概览：
+>
+### ---------------
+### Create: Jianming Zeng
+### Date: 2018-07-09 20:11:07
+### Email: jmzeng1314@163.com
+### Blog: http://www.bio-info-trainee.com/
+### Forum:  http://www.biotrainee.com/thread-1376-1-1.html
+### CAFS/SUSTC/Eli Lilly/University of Macau
+### Update Log: 2018-07-09  First version
+### ---------------
+
+
+**All credits goes to [jmzeng1314](https://github.com/jmzeng1314).**
+————————————————————————————————————————————————————————————————————————————————
+
+## Repo 内容概览：
 - 流程涵盖芯片数据处理的常规流程，包括表达数据矩阵获取、数据读入和存储、芯片注释和 DEG 分析，DEG 结果的常见下游富集分析和简单可视化。
 - 项目包含 GSE42872 和 GSE11122 两个不同芯片数据，放在单独文件夹下。
 - 每个项目文件夹顶层为所有需要用到的 R 脚本，文件夹 `raw_data` 下存放原始数据，是 GEO 下载的表达矩阵数据；文件夹 `output_data` 存放中间数据或输出结果数据；`output_plots` 存放输出的图片。
@@ -15,41 +31,16 @@ fork 自 Jimmy 的一个处理芯片数据的 Repo。
 - 由于原始数据、中间输出数据和图在 Repo 其实里已经有了，所以建议在执行到存储数据或存储图片时直接跳过，或者更好的做法是，更改文件名或者存储路径，这样你就可以把你输出的文件或者图片和 repo 里的做对比，看看你的输出（或者我的）有没有问题。
 
 
-原 Repo 信息：
 
-```
-### ---------------
-###
-### Create: Jianming Zeng
-### Date: 2018-07-09 20:11:07
-### Email: jmzeng1314@163.com
-### Blog: http://www.bio-info-trainee.com/
-### Forum:  http://www.biotrainee.com/thread-1376-1-1.html
-### CAFS/SUSTC/Eli Lilly/University of Macau
-### Update Log: 2018-07-09  First version
-###
-### ---------------
-```
-
-**All credits goes to [jmzeng1314](https://github.com/jmzeng1314).**
-
-
-中国大陆网络环境建议切换镜像到国内并装包:
-
+中国大陆网络环境建议切换镜像到国内并安装需要用到的包，举例:
 ```r
 options(repos="http://mirrors.ustc.edu.cn/CRAN/")
-install.packages("devtools")
-install.packages("remotes")
 install.packages("pheatmap")
 
-library(devtools) 
 source("https://bioconductor.org/biocLite.R") 
 options(BioC_mirror="https://mirrors.ustc.edu.cn/bioc/")
 BiocInstaller::biocLite('org.Hs.eg.db')
 ```
-
-It will install many other packages for you automately, such as : `ALL, CLL, pasilla, airway ,limma，DESeq2，clusterProfiler  ` , that's why it will take a long time to finish if all of these packages are not installed before in your computer. 
-
 
 ## 部分结果图片
 

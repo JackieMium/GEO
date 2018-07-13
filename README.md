@@ -1,7 +1,7 @@
 fork 自 Jimmy 的一个处理芯片数据的 Repo。
 原 Repo 信息：
->
-> ---------------
+
+> 
 > Create: Jianming Zeng
 > Date: 2018-07-09 20:11:07
 > Email: jmzeng1314@163.com
@@ -9,7 +9,7 @@ fork 自 Jimmy 的一个处理芯片数据的 Repo。
 > Forum:  http://www.biotrainee.com/thread-1376-1-1.html
 > CAFS/SUSTC/Eli Lilly/University of Macau
 > Update Log: 2018-07-09  First version
-> ---------------
+
 
 **All credits goes to [jmzeng1314](https://github.com/jmzeng1314).**
 ——————————————————————————————————————————————

@@ -1,17 +1,15 @@
 fork 自 Jimmy 的一个处理芯片数据的 Repo。
 原 Repo 信息：
-
 >
-### ---------------
-### Create: Jianming Zeng
-### Date: 2018-07-09 20:11:07
-### Email: jmzeng1314@163.com
-### Blog: http://www.bio-info-trainee.com/
-### Forum:  http://www.biotrainee.com/thread-1376-1-1.html
-### CAFS/SUSTC/Eli Lilly/University of Macau
-### Update Log: 2018-07-09  First version
-### ---------------
-
+>### ---------------
+>### Create: Jianming Zeng
+>### Date: 2018-07-09 20:11:07
+>### Email: jmzeng1314@163.com
+>### Blog: http://www.bio-info-trainee.com/
+>### Forum:  http://www.biotrainee.com/thread-1376-1-1.html
+>### CAFS/SUSTC/Eli Lilly/University of Macau
+>### Update Log: 2018-07-09  First version
+>### ---------------
 
 **All credits goes to [jmzeng1314](https://github.com/jmzeng1314).**
 ————————————————————————————————————————————————————————————————————————————————
@@ -29,10 +27,7 @@ fork 自 Jimmy 的一个处理芯片数据的 Repo。
 
 - 每执行完一个脚本时建议重启 R，在 RStudio 中快捷键 `Ctrl + Shifr + F10` 即可；
 - 由于原始数据、中间输出数据和图在 Repo 其实里已经有了，所以建议在执行到存储数据或存储图片时直接跳过，或者更好的做法是，更改文件名或者存储路径，这样你就可以把你输出的文件或者图片和 repo 里的做对比，看看你的输出（或者我的）有没有问题。
-
-
-
-中国大陆网络环境建议切换镜像到国内并安装需要用到的包，举例:
+- 中国大陆网络环境建议切换镜像到国内并安装需要用到的包，举例:
 ```r
 options(repos="http://mirrors.ustc.edu.cn/CRAN/")
 install.packages("pheatmap")

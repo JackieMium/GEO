@@ -1,18 +1,4 @@
-rm(list=ls())
-### ---------------
-###
-### Create: Jianming Zeng
-### Date: 2018-07-09 20:11:07
-### Email: jmzeng1314@163.com
-### Blog: http://www.bio-info-trainee.com/
-### Forum:  http://www.biotrainee.com/thread-1376-1-1.html
-### CAFS/SUSTC/Eli Lilly/University of Macau
-### Update Log: 2018-07-09  First version
-###
-### ---------------
-
-
-load(file='GSE11121_new_exprSet.Rdata')
+load(file='output_data/GSE11121_new_exprSet.Rdata')
 exprSet=new_exprSet
 dim(exprSet)
 colnames(phe)
@@ -23,10 +9,10 @@ group_list=ifelse(group_list==1,'died','lived')
 library(limma)
 tmp=data.frame(case=c(0,0,0,1,1,1),
                control=c(1,1,1,0,0,0))
-design <- model.matrix(~0+factor(group_list))
+(design <- model.matrix(~0+factor(group_list)))
 colnames(design)=levels(factor(group_list))
 rownames(design)=colnames(exprSet)
-design
+head(design)
 
 contrast.matrix<-makeContrasts(paste0(unique(group_list),collapse = "-"),
                                levels = design)
@@ -53,7 +39,7 @@ deg = function(exprSet,design,contrast.matrix){
   return(nrDEG)
 }
 
-re = deg(exprSet,design,contrast.matrix)
+re = deg(exprSet, design, contrast.matrix)
 
 
 nrDEG=re
@@ -62,22 +48,16 @@ library(pheatmap)
 choose_gene=head(rownames(nrDEG),50) ## 50 maybe better
 choose_matrix=exprSet[choose_gene,]
 choose_matrix=t(scale(t(choose_matrix)))
-pheatmap(choose_matrix,filename = 'DEG_top50_heatmap.png')
-
+pheatmap(choose_matrix,filename = 'output_plots/DEG_top50_heatmap.png')
 
 library(ggplot2)
-
-
 ## volcano plot
 colnames(nrDEG)
 plot(nrDEG$logFC,-log10(nrDEG$P.Value))
 
 DEG=nrDEG
-
-
 logFC_cutoff <- with(DEG,mean(abs( logFC)) + 2*sd(abs( logFC)) )
 # logFC_cutoff=1
-
 DEG$change = as.factor(ifelse(DEG$P.Value < 0.05 & abs(DEG$logFC) > logFC_cutoff,
                               ifelse(DEG$logFC > logFC_cutoff ,'UP','DOWN'),'NOT')
 )
@@ -95,10 +75,9 @@ g = ggplot(data=DEG,
   ggtitle( this_tile ) + theme(plot.title = element_text(size=15,hjust = 0.5))+
   scale_colour_manual(values = c('blue','black','red')) ## corresponding to the levels(res$change)
 print(g)
-ggsave(g,filename = 'volcano.png')
+ggsave(g,filename = 'output_plots/volcano.png')
  
-save(new_exprSet,group_list,nrDEG,DEG, 
-     file='GSE11121_DEG.Rdata')
+save(new_exprSet,group_list,nrDEG,DEG, file='output_data/GSE11121_DEG.Rdata')
 
 
 

@@ -1,17 +1,4 @@
-rm(list=ls())
-### ---------------
-###
-### Create: Jianming Zeng
-### Date: 2018-07-09 20:11:07
-### Email: jmzeng1314@163.com
-### Blog: http://www.bio-info-trainee.com/
-### Forum:  http://www.biotrainee.com/thread-1376-1-1.html
-### CAFS/SUSTC/Eli Lilly/University of Macau
-### Update Log: 2018-07-09  First version
-###
-### ---------------
-
-load(file='GSE11121_DEG.Rdata')
+load(file='output_data/GSE11121_DEG.Rdata')
 source('functions.R')
 library(ggplot2)
 library(clusterProfiler)
@@ -19,8 +6,7 @@ library(org.Hs.eg.db)
 df <- bitr(rownames(DEG), fromType = "SYMBOL",
            toType = c( "ENTREZID"),
            OrgDb = org.Hs.eg.db)
-head(df)
-head(DEG)
+head(df); head(DEG)
 DEG$SYMBOL = rownames(DEG)
 DEG=merge(DEG,df,by='SYMBOL')
 head(DEG)
@@ -29,6 +15,7 @@ gene_up= DEG[DEG$change == 'UP','ENTREZID']
 gene_down=DEG[DEG$change == 'DOWN','ENTREZID'] 
 gene_diff=c(gene_up,gene_down)
 gene_all=as.character(DEG[ ,'ENTREZID'] )
+
 data(geneList, package="DOSE")
 head(geneList)
 boxplot(geneList)
@@ -36,11 +23,10 @@ boxplot(DEG$logFC)
 
 geneList=DEG$logFC
 names(geneList)=DEG$ENTREZID
-geneList=sort(geneList,decreasing = T)
-
+geneList=sort(geneList,decreasing = TRUE)
 
 ## KEGG pathway analysis
-if(T){
+if(TRUE){
   ###   over-representation test
   kk.up <- enrichKEGG(gene         = gene_up,
                       organism     = 'hsa',
@@ -67,7 +53,7 @@ if(T){
   g_kegg=kegg_plot(up_kegg,down_kegg)
   print(g_kegg)
 
-  ggsave(g_kegg,filename = 'kegg_up_down.png')
+  ggsave(g_kegg,filename = 'output_plots/kegg_up_down.png')
   
   ###  GSEA 
   kk_gse <- gseKEGG(geneList     = geneList,
@@ -84,9 +70,7 @@ if(T){
   
   g_kegg=kegg_plot(up_kegg,down_kegg)
   print(g_kegg)
-  ggsave(g_kegg,filename = 'kegg_up_down_gsea.png')
-  
-  
+  ggsave(g_kegg,filename = 'output_plots/kegg_up_down_gsea.png')
 }
 
 ### GO database analysis 
@@ -95,8 +79,8 @@ g_list=list(gene_up=gene_up,
             gene_down=gene_down,
             gene_diff=gene_diff)
 
-if(F){
-  go_enrich_results <- lapply( g_list , function(gene) {
+if(TRUE){
+  go_enrich_results <- lapply(g_list , function(gene) {
     lapply( c('BP','MF','CC') , function(ont) {
       cat(paste('Now process ',ont ))
       ego <- enrichGO(gene          = gene,
@@ -112,12 +96,11 @@ if(F){
       return(ego)
     })
   })
-  save(go_enrich_results,file = 'go_enrich_results.Rdata')
-  
+  save(go_enrich_results,file = 'output_data/go_enrich_results.Rdata')
 }
 
 
-load(file = 'go_enrich_results.Rdata')
+load(file = 'output_data/go_enrich_results.Rdata')
 
 n1= c('gene_up','gene_down','gene_diff')
 n2= c('BP','MF','CC') 
@@ -125,18 +108,9 @@ for (i in 1:3){
   for (j in 1:3){
     fn=paste0('dotplot_',n1[i],'_',n2[j],'.png')
     cat(paste0(fn,'\n'))
-    png(fn,res=150,width = 1080)
+    fpath <- ('output_plots/GO_dotplots/')
+    png(paste0(fpath, fn),res=150,width = 1080)
     print( dotplot(go_enrich_results[[i]][[j]] ))
     dev.off()
   }
 }
-
-# TODO:
-# ~~~~~~
-
-
-  
-
-
-
-

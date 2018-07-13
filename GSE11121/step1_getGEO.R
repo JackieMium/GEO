@@ -1,27 +1,17 @@
-rm(list=ls())
-### ---------------
-###
-### Create: Jianming Zeng
-### Date: 2018-07-09 20:11:07
-### Email: jmzeng1314@163.com
-### Blog: http://www.bio-info-trainee.com/
-### Forum:  http://www.biotrainee.com/thread-1376-1-1.html
-### CAFS/SUSTC/Eli Lilly/University of Macau
-### Update Log: 2018-07-09  First version
-###
-### ---------------
-
-if(F){
+if(FALSE){
   library(GEOquery)
-  gset <- getGEO('GSE11121', destdir=".",
-                 AnnotGPL = F,
-                 getGPL = F)
-  save(gset,file='GSE11121_eSet.Rdata')
+  gset <- getGEO('GSE11121', destdir="raw_data/",
+                 AnnotGPL = FALSE,
+                 getGPL = FALSE)
+  save(gset,file='output_data/GSE11121_eSet.Rdata')
 }
-load('GSE11121_eSet.Rdata')
+
+load('output_data/GSE11121_eSet.Rdata')
+
 b = gset[[1]]
 raw_exprSet=exprs(b)
 phe=pData(b)
+# we will only use part of all cilnical information about these samples in this tutorial
 phe=phe[,c(43:46,48)]
 save(raw_exprSet,phe,
-     file='GSE11121_raw_exprSet.Rdata')
+     file='output_data/GSE11121_raw_exprSet.Rdata')

@@ -47,7 +47,7 @@ rm_Dup_anno <- function(exprSet,ids){
 }
 new_exprSet <- rm_Dup_anno(exprSet,ids)
 
-save(new_exprSet,phe,file='output_data/GSE11121_new_exprSet.Rdata')
+save(new_exprSet, phe, file='output_data/GSE11121_new_exprSet.Rdata')
 load(file='output_data/GSE11121_new_exprSet.Rdata')
 
 exprSet=new_exprSet

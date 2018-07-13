@@ -1,24 +1,23 @@
-load(file='GSE42872_new_exprSet.Rdata')
-exprSet=new_exprSet
+load(file='output_data/GSE42872_new_exprSet.Rdata')
+exprSet <- new_exprSet
 dim(exprSet)
 group_list
 
 library(limma)
 tmp=data.frame(case=c(0,0,0,1,1,1),
                control=c(1,1,1,0,0,0))
-design <- model.matrix(~0+factor(group_list))
+(design <- model.matrix(~0+factor(group_list)))
 colnames(design)=levels(factor(group_list))
 rownames(design)=colnames(exprSet)
 design
 
+# 这个矩阵声明，我们要把progres.组跟stable进行差异分析比较
 contrast.matrix<-makeContrasts(paste0(unique(group_list),collapse = "-"),
                                levels = design)
-contrast.matrix<-makeContrasts("case-control",
-                               levels = design)
+(contrast.matrix<-makeContrasts("case-control",
+                               levels = design))
 
-contrast.matrix ##这个矩阵声明，我们要把progres.组跟stable进行差异分析比较
-
-
+# fit model and do DEG analysis
 deg = function(exprSet,design,contrast.matrix){
   ##step1
   fit <- lmFit(exprSet,design)
@@ -35,32 +34,26 @@ deg = function(exprSet,design,contrast.matrix){
   head(nrDEG)
   return(nrDEG)
 }
-
 re = deg(exprSet,design,contrast.matrix)
-
-
 nrDEG=re
+
 ## heatmap
 library(pheatmap)
 choose_gene=head(rownames(nrDEG),100) ## 50 maybe better
 choose_matrix=exprSet[choose_gene,]
 choose_matrix=t(scale(t(choose_matrix)))
-pheatmap(choose_matrix,filename = 'DEG_top100_heatmap.png')
-
+pheatmap(choose_matrix, fontsize_row = 5)
+# not run
+pheatmap(choose_matrix,filename = 'output_plots/DEG_top100_heatmap.png')
 
 library(ggplot2)
-
-
 ## volcano plot
 colnames(nrDEG)
 plot(nrDEG$logFC,-log10(nrDEG$P.Value))
 
 DEG=nrDEG
-
-
 logFC_cutoff <- with(DEG,mean(abs( logFC)) + 2*sd(abs( logFC)) )
 # logFC_cutoff=1
-
 DEG$change = as.factor(ifelse(DEG$P.Value < 0.05 & abs(DEG$logFC) > logFC_cutoff,
                               ifelse(DEG$logFC > logFC_cutoff ,'UP','DOWN'),'NOT')
 )
@@ -78,13 +71,8 @@ g = ggplot(data=DEG,
   ggtitle( this_tile ) + theme(plot.title = element_text(size=15,hjust = 0.5))+
   scale_colour_manual(values = c('blue','black','red')) ## corresponding to the levels(res$change)
 print(g)
-ggsave(g,filename = 'volcano.png')
- 
+
+# not run
+ggsave(g,filename = 'output_plots/volcano.png')
 save(new_exprSet,group_list,nrDEG,DEG, 
-     file='GSE42872_DEG.Rdata')
-
-
-
-
-
-
+     file='output_data/GSE42872_DEG.Rdata')

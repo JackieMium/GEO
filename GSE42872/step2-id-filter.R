@@ -1,3 +1,5 @@
+library('hugene10sttranscriptcluster.db')
+
 if(FALSE){
   downGSE <- function(studyID = "GSE1009", destdir = ".") {
     
@@ -15,26 +17,32 @@ if(FALSE){
   downGSE('GSE42872')
 }
 
-load(file='GSE42872_raw_exprSet.Rdata') 
+load(file='output_data/GSE42872_raw_exprSet.Rdata')
 exprSet=raw_exprSet
-library(hugene10sttranscriptcluster.db)
-library(hugene10sttranscriptcluster.db)
+
+# explore annotation information
 ids=toTable(hugene10sttranscriptclusterSYMBOL)
+# unique probe-gene pairs
 length(unique(ids$symbol))
+# some multi-mapping examples
 tail(sort(table(ids$symbol)))
+# summary of mapping
 table(sort(table(ids$symbol)))
 plot(table(sort(table(ids$symbol))))
 
+# how many probes are in the annotation file?
 table(rownames(exprSet) %in% ids$probe_id)
 dim(exprSet)
+# select only probes that have an annotation entry
 exprSet=exprSet[rownames(exprSet) %in% ids$probe_id,]
 dim(exprSet)
-
+# select probes that we have in expreSet in annotation file
 ids=ids[match(rownames(exprSet),ids$probe_id),]
 head(ids)
-exprSet[1:5,1:5]
+head(exprSet)
 
-jimmy <- function(exprSet,ids){
+# annotate eSet and select max in case of multi-mapping
+rm_Dup_anno <- function(exprSet,ids){
   tmp = by(exprSet,
            ids$symbol,
            function(x) rownames(x)[which.max(rowMeans(x))] )
@@ -46,16 +54,17 @@ jimmy <- function(exprSet,ids){
   rownames(exprSet)=ids[match(rownames(exprSet),ids$probe_id),2]
   return(exprSet)
 }
+new_exprSet <- rm_Dup_anno(exprSet,ids)
 
-new_exprSet <- jimmy(exprSet,ids)
-
-save(new_exprSet,group_list,
-     file='GSE42872_new_exprSet.Rdata')
-
+# not run since file is already there
+save(new_exprSet,group_list, file='GSE42872_new_exprSet.Rdata')
 load(file='GSE42872_new_exprSet.Rdata')
-exprSet=new_exprSet
+
+exprSet <- new_exprSet
+
+# PCA and Clutering all-in-one function
+# not run
 if(TRUE){
-  
   library(reshape2)
   exprSet_L=melt(exprSet)
   colnames(exprSet_L)=c('probe','sample','value')
@@ -99,5 +108,3 @@ if(TRUE){
   autoplot(prcomp( df[,1:(ncol(df)-1)] ), data=df,colour = 'group')+theme_bw()
   dev.off()
 }
-
-

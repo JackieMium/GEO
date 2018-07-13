@@ -1,17 +1,3 @@
-rm(list=ls())
-### ---------------
-###
-### Create: Jianming Zeng
-### Date: 2018-07-09 20:11:07
-### Email: jmzeng1314@163.com
-### Blog: http://www.bio-info-trainee.com/
-### Forum:  http://www.biotrainee.com/thread-1376-1-1.html
-### CAFS/SUSTC/Eli Lilly/University of Macau
-### Update Log: 2018-07-09  First version
-###
-### ---------------
-
-
 load(file='GSE42872_new_exprSet.Rdata')
 exprSet=new_exprSet
 dim(exprSet)

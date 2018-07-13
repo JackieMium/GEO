@@ -54,10 +54,10 @@ if(TRUE){
   kegg_up_dt <- as.data.frame(kk.up)
   down_kegg<-kegg_down_dt[kegg_down_dt$pvalue<0.05,];down_kegg$group=-1
   up_kegg<-kegg_up_dt[kegg_up_dt$pvalue<0.05,];up_kegg$group=1
-
+  
   g_kegg=kegg_plot(up_kegg,down_kegg)
   print(g_kegg)
-
+  
   ggsave(g_kegg,filename = 'output_plots/kegg_up_down.png')
   
   ###  GSEA 

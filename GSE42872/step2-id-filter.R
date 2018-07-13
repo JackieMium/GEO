@@ -95,7 +95,7 @@ if(TRUE){
                   cex = 0.7, col = "blue")
   hc=hclust(dist(t(exprSet)))
   par(mar=c(5,5,5,10))
-  png('hclust.png',res=120)
+  png('output_plots/hclust.png',res=120)
   plot(as.dendrogram(hc), nodePar = nodePar, horiz = TRUE)
   dev.off()
   
@@ -104,7 +104,7 @@ if(TRUE){
   library(ggfortify)
   df=as.data.frame(t(exprSet))
   df$group=group_list
-  png('pca.png',res=120)
+  png('output_plots/pca.png',res=120)
   autoplot(prcomp( df[,1:(ncol(df)-1)] ), data=df,colour = 'group')+theme_bw()
   dev.off()
 }

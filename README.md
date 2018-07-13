@@ -61,3 +61,7 @@ BiocInstaller::biocLite('org.Hs.eg.db')
 ### GO 富集
 
 ![GO-BP](https://github.com/JackieMium/GEO/blob/master/GSE42872/output_plots/GO_dotplots/dotplot_gene_diff_BP.png)
+
+### 生存分析
+
+![Survival](https://github.com/JackieMium/GEO/blob/master/GSE11121/output_plots/gene.H6PD.survival.png)

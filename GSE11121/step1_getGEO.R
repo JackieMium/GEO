@@ -12,6 +12,6 @@ b = gset[[1]]
 raw_exprSet=exprs(b)
 phe=pData(b)
 # we will only use part of all cilnical information about these samples in this tutorial
+colnames(phe)
 phe=phe[,c(43:46,48)]
-save(raw_exprSet,phe,
-     file='output_data/GSE11121_raw_exprSet.Rdata')
+save(raw_exprSet,phe, file='output_data/GSE11121_raw_exprSet.Rdata')

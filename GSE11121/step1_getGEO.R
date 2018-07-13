@@ -12,6 +12,8 @@ b = gset[[1]]
 raw_exprSet=exprs(b)
 phe=pData(b)
 # we will only use part of all cilnical information about these samples in this tutorial
+# here we keep only 5 columnms for example: 
+# survial time and vital status, tumor grade and size, N stage
 colnames(phe)
 phe=phe[,c(43:46,48)]
 save(raw_exprSet,phe, file='output_data/GSE11121_raw_exprSet.Rdata')

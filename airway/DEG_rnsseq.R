@@ -1,4 +1,4 @@
-if(F){
+if(FALSE){
   install.packages("devtools",
                    repos="https://mirrors.tuna.tsinghua.edu.cn/CRAN/")
   library(devtools) 
@@ -13,22 +13,23 @@ library(edgeR)
 library(limma)
 library(airway)
 
-if(F){
+if(FALSE){
   library(airway)
   data(airway)
   exprSet=assay(airway)
   group_list=colData(airway)[,3]
-  save(exprSet,group_list,file = 'airway_exprSet.Rdata')
+  save(exprSet,group_list,file = 'output_data/airway_exprSet.Rdata')
 }
-rm(list = ls())
-options(stringsAsFactors = F)
-load(file = 'airway_exprSet.Rdata')
+
+options(stringsAsFactors = FALSE)
+load(file = 'output_data/airway_exprSet.Rdata')
 source('functions.R')
-### ---------------
-###
-### Firstly run DEseq2 
-###
-### ---------------
+
+
+
+# Firstly run DEseq2 ------------------------------------------------------
+
+
 suppressMessages(library(DESeq2)) 
 group_list=c('untrt','trt' ,'untrt','trt' ,'untrt','trt','untrt','trt')
 (colData <- data.frame(row.names=colnames(exprSet), 
@@ -43,9 +44,8 @@ resOrdered <- res[order(res$padj),]
 head(resOrdered)
 DEG =as.data.frame(resOrdered)
 DEG = na.omit(DEG)
-if(F){
-  
-  png("DESeq2_qc_dispersions.png", 1000, 1000, pointsize=20)
+if(FALSE){
+  png("output_plots/DESeq2_qc_dispersions.png", 1000, 1000, pointsize=20)
   plotDispEsts(dds, main="Dispersion plot")
   dev.off()
   
@@ -56,7 +56,7 @@ if(F){
   y=apply(exprMatrix_rlog,1,mad) 
   plot(x,y) 
   
-  png("DESeq2_RAWvsNORM.png",height = 800,width = 800)
+  png("output_plots/DESeq2_RAWvsNORM.png",height = 800,width = 800)
   par(cex = 0.7)
   n.sample=ncol(exprSet)
   if(n.sample>40) par(cex = 0.5)
@@ -67,33 +67,36 @@ if(F){
   hist(as.matrix(exprSet))
   hist(exprMatrix_rlog)
   dev.off()
-  
-  
-  
 }
+
 nrDEG=DEG
 DEseq_DEG=nrDEG
 nrDEG=DEseq_DEG[,c(2,6)]
 colnames(nrDEG)=c('log2FoldChange','pvalue') 
 draw_h_v(exprSet,nrDEG,'DEseq2')
 source('functions.R')
-### ---------------
-###
-### Then run edgeR 
-###
-### ---------------
+
+
+
+# Then run edgeR ----------------------------------------------------------
+
+
+
 library(edgeR)
 d <- DGEList(counts=exprSet,group=factor(group_list))
+
+# filter count data based on cpm
 keep <- rowSums(cpm(d)>1) >= 2
 table(keep)
 d <- d[keep, , keep.lib.sizes=FALSE]
 d$samples$lib.size <- colSums(d$counts)
 d <- calcNormFactors(d)
-d$samples
 
+d$samples
 design <- model.matrix(~0+factor(group_list))
-rownames(design)<-colnames(dge)
+rownames(design)<-colnames(d)
 colnames(design)<-levels(factor(group_list))
+
 dge=d
 dge <- estimateGLMCommonDisp(dge,design)
 dge <- estimateGLMTrendedDisp(dge, design)
@@ -104,18 +107,21 @@ fit <- glmFit(dge, design)
 lrt <- glmLRT(fit,  contrast=c(-1,1)) 
 nrDEG=topTags(lrt, n=nrow(dge))
 nrDEG=as.data.frame(nrDEG)
+
 head(nrDEG)
 edgeR_DEG =nrDEG 
 nrDEG=edgeR_DEG[,c(1,5)]
 colnames(nrDEG)=c('log2FoldChange','pvalue')
-draw_h_v(exprSet,nrDEG,'edgeR')
 
 source('functions.R')
-### ---------------
-###
-### Then run edgeR 
-###
-### --------------- 
+draw_h_v(exprSet,nrDEG,'edgeR')
+
+
+
+# And finally limma-voom  ----------------------------------------------------------
+
+
+
 suppressMessages(library(limma))
 design <- model.matrix(~0+factor(group_list))
 colnames(design)=levels(factor(group_list))
@@ -141,29 +147,24 @@ nrDEG=DEG_limma_voom[,c(1,4)]
 colnames(nrDEG)=c('log2FoldChange','pvalue')
 draw_h_v(exprSet,nrDEG,'limma')
 
-
+# save all DEG results and dds
 save(DEG_limma_voom,DEseq_DEG,edgeR_DEG,
      dds,exprSet,group_list,
      file = 'DEG_results.Rdata')
 
 
-rm(list = ls())
-load(file = 'DEG_results.Rdata')
-source('functions.R')
-
-nrDEG=DEG_limma_voom[,c(1,4)]
-colnames(nrDEG)=c('log2FoldChange','pvalue')
-draw_h_v(exprSet,nrDEG,'limma')
-
-nrDEG=edgeR_DEG[,c(1,5)]
-colnames(nrDEG)=c('log2FoldChange','pvalue')
-draw_h_v(exprSet,nrDEG,'edgeR')
+# load(file = 'DEG_results.Rdata')
+# source('functions.R')
+# 
+# nrDEG=DEG_limma_voom[,c(1,4)]
+# colnames(nrDEG)=c('log2FoldChange','pvalue')
+# draw_h_v(exprSet,nrDEG,'limma')
+# 
+# nrDEG=edgeR_DEG[,c(1,5)]
+# colnames(nrDEG)=c('log2FoldChange','pvalue')
+# draw_h_v(exprSet,nrDEG,'edgeR')
 
 
 nrDEG=DEseq_DEG[,c(2,6)]
 colnames(nrDEG)=c('log2FoldChange','pvalue') 
 draw_h_v(exprSet,nrDEG,'DEseq2')
-
-
-
-

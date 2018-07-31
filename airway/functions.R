@@ -1,15 +1,3 @@
-### ---------------
-###
-### Create: Jianming Zeng
-### Date: 2018-07-15 17:07:49
-### Email: jmzeng1314@163.com
-### Blog: http://www.bio-info-trainee.com/
-### Forum:  http://www.biotrainee.com/thread-1376-1-1.html
-### CAFS/SUSTC/Eli Lilly/University of Macau
-### Update Log: 2018-07-09  First version
-###
-### ---------------
-
 draw_h_v <- function(exprSet,need_DEG,n='DEseq2'){
   ## we only need two columns of DEG, which are log2FoldChange and pvalue
   ## heatmap
@@ -17,7 +5,7 @@ draw_h_v <- function(exprSet,need_DEG,n='DEseq2'){
   choose_gene=head(rownames(need_DEG),50) ## 50 maybe better
   choose_matrix=exprSet[choose_gene,]
   choose_matrix=t(scale(t(choose_matrix)))
-  pheatmap(choose_matrix,filename = paste0(n,'_need_DEG_top50_heatmap.png'))
+  pheatmap(choose_matrix,filename = paste0('output_plots/',n,'_need_DEG_top50_heatmap.png'))
   
   logFC_cutoff <- with(need_DEG,mean(abs( log2FoldChange)) + 2*sd(abs( log2FoldChange)) )
   # logFC_cutoff=1
@@ -39,5 +27,5 @@ draw_h_v <- function(exprSet,need_DEG,n='DEseq2'){
     ggtitle( this_tile ) + theme(plot.title = element_text(size=15,hjust = 0.5))+
     scale_colour_manual(values = c('blue','black','red')) ## corresponding to the levels(res$change)
   print(g)
-  ggsave(g,filename = paste0(n,'_volcano.png'))
+  ggsave(g,filename = paste0('output_plots/',n,'_volcano.png'))
 }

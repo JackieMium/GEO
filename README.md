@@ -1,4 +1,4 @@
-fork 自 Jimmy 的一个处理芯片数据的 Repo。
+fork 自 Jimmy 的一个处理芯片和 RNA -Seq 数据的 Repo。
 原 Repo 信息：
 
 > Create: Jianming Zeng   
@@ -13,11 +13,12 @@ Update Log: 2018-07-09  First version
 ——————————————————————————————————————————————
 
 ## Repo 内容概览：
-- 流程涵盖芯片数据处理的常规流程，包括表达数据矩阵获取、数据读入和存储、芯片注释和 DEG 分析，DEG 结果的常见下游富集分析和生存分析和简单可视化。
-- 项目包含 GSE42872 和 GSE11122 两个不同芯片数据，放在单独文件夹下。
-- 每个项目文件夹顶层为所有需要用到的 R 脚本，文件夹 `raw_data` 下存放原始数据，是 GEO 下载的表达矩阵数据；文件夹 `output_data` 存放中间数据或输出结果数据；`output_plots` 存放输出的图片。
+- 流程涵盖芯片和 RNA-Seq 数据处理的常规流程，前者包括表达数据矩阵获取、数据读入和存储、芯片注释和 DEG 分析，DEG 结果的常见下游富集分析和生存分析和简单可视化；后者包括 RNA-Seq count data 分别通过 DEseq2、edgeR 和 limma-voom 进行 DEG 分析和简单可视化。
+- 项目包含两个不同芯片（ GSE42872 和 GSE11122） 和一个 RNA-Seq 数据 （airway），分别放在单独文件夹下。
+- 每个项目文件夹顶层为所有需要用到的 R 脚本，文件夹 `raw_data` 下存放原始数据，是 GEO 表达矩阵数据或 count data；文件夹 `output_data` 存放中间数据或输出结果数据；`output_plots` 存放输出的图片。
 - [GSE42872](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi) 来自 Affymetrix Human Gene 1.0 ST Array [transcript (gene) version] 芯片，6 个样本 3+3 分为两组。详细信息参考 GEO 页面介绍。
 - [GSE11122](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=gse11121) 来自 Affymetrix Human Genome U133A Array 芯片，200 个样本。详细信息参考 GEO 页面介绍。
+- [airway](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52778) 来自 airway 包自带数据集，是人气道平滑肌细胞的 RNA—Seq 数据。详细信息参考 GEO 页面介绍和 airway 文件夹内 PDF（原始文献）。
 
 ## 使用指北
 建议下载 Repo 后双击 `xxx.Rproj` 在 RStudio 中打开项目文件，然后依次打开打开 `stepNum.R` 这些文件就可以愉快地开始了。
